@@ -6,14 +6,20 @@ import urllib.request
 import random
 
 class QuoteScraperBrainyQuote:
-	BASE_URL = "https://www.brainyquote.com/"
+	BASE_URL   = "https://www.brainyquote.com/"
 	AUTHOR_URL = "authors/"
+	TOPIC_URL  = "topics/"
+
 	# Retrieve quotes
-	def retrieveQuotes(self, author=None):
-		author = author.lower()
-		author = author.replace(" ", "_")
-		url = urllib.parse.urljoin(self.BASE_URL, self.AUTHOR_URL)
-		url = urllib.parse.urljoin(url, author)
+	def retrieveQuotes(self, author=None, topic=None):
+		if author is not None:
+			author = author.lower()
+			author = author.replace(" ", "_")
+			url = urllib.parse.urljoin(self.BASE_URL, self.AUTHOR_URL)
+			url = urllib.parse.urljoin(url, author)
+		elif topic is not None:
+			url = urllib.parse.urljoin(self.BASE_URL, self.TOPIC_URL)
+			url = urllib.parse.urljoin(url, topic)			
 
 		# The user agent is set to Mozilla since Brainy Quote blocks the default user agent.
 		request =  urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
@@ -55,13 +61,8 @@ class QuoteScraper():
 		randomQuote = random.choice(randomAuthorQuotes)
 		return randomQuote
 
-
-
-
-
-
-	def retrieveQuotes(self, author=None):
-		return self.quoteScraper.retrieveQuotes(author=author)
+	def retrieveQuotes(self, author=None, topic=None):
+		return self.quoteScraper.retrieveQuotes(author=author, topic=topic)
 
 	def retrieveAuthors(self, author=None):
 		self.authorList = self.quoteScraper.retrieveAuthors()
@@ -69,9 +70,9 @@ class QuoteScraper():
 
 if __name__ == "__main__":
 	quoteScraper = QuoteScraper()
-	#result = quoteScraper.retrieveQuotes(author="Charles Darwin")
+	result = quoteScraper.retrieveQuotes(topic="technology")
 	#result = quoteScraper.retrieveAuthors()
-	result = quoteScraper.retrieveRandomQuote()
+	#result = quoteScraper.retrieveRandomQuote()
 
 	print(result)
 
