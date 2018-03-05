@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import urllib.parse
 import urllib
 import urllib.request
+import random
 
 class QuoteScraperBrainyQuote:
 	BASE_URL = "https://www.brainyquote.com/"
@@ -41,9 +42,21 @@ class QuoteScraper():
 	BRAINYQUOTE_BASE_URL = "https://www.brainyquote.com/"
 	BRAINYQUOTE_AUTHOR_URL = "authors/"
 	quoteScraper = None
+	authorList = None
 
 	def __init__(self, primarySource="Brainy_Quote"):
 		self.quoteScraper = QuoteScraperBrainyQuote()
+
+	def retrieveRandomQuote(self):
+		if not self.authorList:
+			self.retrieveAuthors()
+		randomAuthor = random.choice(self.authorList)
+		randomAuthorQuotes = self.retrieveQuotes(author=randomAuthor)
+		randomQuote = random.choice(randomAuthorQuotes)
+		return randomQuote
+
+
+
 
 
 
@@ -51,12 +64,15 @@ class QuoteScraper():
 		return self.quoteScraper.retrieveQuotes(author=author)
 
 	def retrieveAuthors(self, author=None):
-		return self.quoteScraper.retrieveAuthors()
+		self.authorList = self.quoteScraper.retrieveAuthors()
+		return self.authorList
 
 if __name__ == "__main__":
 	quoteScraper = QuoteScraper()
 	#result = quoteScraper.retrieveQuotes(author="Charles Darwin")
-	result = quoteScraper.retrieveAuthors()
+	#result = quoteScraper.retrieveAuthors()
+	result = quoteScraper.retrieveRandomQuote()
+
 	print(result)
 
 
